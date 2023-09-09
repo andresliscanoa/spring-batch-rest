@@ -1,0 +1,59 @@
+version: '3.8'
+services:
+  app-batch:
+    build:
+      context: spring-batch
+      dockerfile: Dockerfile
+    depends_on:
+      - db-batch
+      - app-rest
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-batch:5432/postgres
+      SERVICE_ENDPOINT_URL: http://app-rest:8080/users
+    networks:
+      - batch-rest-network
+  app-rest:
+    build:
+      context: spring-rest
+      dockerfile: Dockerfile
+    depends_on:
+      - db-rest
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-rest:5432/postgres
+    expose:
+      - 8080:8080
+    networks:
+      - batch-rest-network
+  db-batch:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    networks:
+      - batch-rest-network
+    volumes:
+      - db_batch:/var/lib/postgresql/data
+      - ./scripts/data.sql:/docker-entrypoint-initdb.d/data.sql
+  db-rest:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5433:5432'
+    networks:
+      - batch-rest-network
+    volumes:
+      - db_rest:/var/lib/postgresql/data
+networks:
+  batch-rest-network:
+    driver: bridge
+volumes:
+  db_batch:
+    driver: local
+  db_rest:
+    driver: local

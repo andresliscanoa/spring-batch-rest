@@ -1,0 +1,10 @@
+.mvn/
+src/
+target/
+.*ignore
+Dockerfile
+mvnw
+mvnw.cmd
+*.iml
+*.xml
+!target/app.jar

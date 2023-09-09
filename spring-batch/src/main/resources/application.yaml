@@ -1,0 +1,32 @@
+server:
+  port: 8080
+spring:
+  batch:
+    jdbc:
+      initialize-schema: NEVER
+      table-prefix: batch.BATCH_
+    job:
+      enabled: true
+      name: import-users
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+logging:
+  level:
+    ROOT: INFO
+    org:
+      hibernate:
+        SQL: DEBUG
+        type: TRACE
+service:
+  endpoint:
+    url: http://localhost:8080/users
