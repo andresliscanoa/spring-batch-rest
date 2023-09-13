@@ -1,5 +1,6 @@
 .mvn/
-src/
+.idea/
+scripts/
 target/
 .*ignore
 Dockerfile
@@ -7,4 +8,6 @@ mvnw
 mvnw.cmd
 *.iml
 *.xml
-!target/app.jar
+*.md
+*.yaml
+!pom.xml
